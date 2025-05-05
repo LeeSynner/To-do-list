@@ -3,9 +3,11 @@ package com.example.to_do_list.service;
 import com.example.to_do_list.domain.Task;
 import com.example.to_do_list.dto.TaskDto;
 import com.example.to_do_list.repository.TaskRepository;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -18,6 +20,10 @@ public class TaskService {
 
     public List<TaskDto> getAllTasks() {
         return taskRepository.findAll().stream().map(this::toDto).toList();
+    }
+
+    public Optional<TaskDto> getTaskById(Long id) {
+        return taskRepository.findById(id).map(this::toDto);
     }
 
     public TaskDto toDto(Task task) {
