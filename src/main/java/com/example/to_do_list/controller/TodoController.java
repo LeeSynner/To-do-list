@@ -40,4 +40,10 @@ public class TodoController {
         Optional<TaskDto> updatedTaskDto = taskService.update(id, taskDto);
         return updatedTaskDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/task/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

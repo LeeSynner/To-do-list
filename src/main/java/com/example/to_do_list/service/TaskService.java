@@ -50,6 +50,10 @@ public class TaskService {
         return task.map(this::toDto);
     }
 
+    public void delete(Long id) {
+        taskRepository.deleteById(id);
+    }
+
     public TaskDto toDto(Task task) {
         TaskDto taskDto = new TaskDto();
         taskDto.setId(task.getId());
