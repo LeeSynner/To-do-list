@@ -3,8 +3,11 @@ package com.example.to_do_list.controller;
 import com.example.to_do_list.domain.User;
 import com.example.to_do_list.dto.AuthRequest;
 import com.example.to_do_list.dto.AuthResponse;
+import com.example.to_do_list.dto.UserDto;
 import com.example.to_do_list.repository.UserRepository;
 import com.example.to_do_list.service.JwtService;
+import com.example.to_do_list.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,17 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     public  AuthController(AuthenticationManager authenticationManager,
                            JwtService jwtService,
-                           UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+                           UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -46,13 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody AuthRequest request) {
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role("ROLE_USER")
-                .build();
-        userRepository.save(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 }
