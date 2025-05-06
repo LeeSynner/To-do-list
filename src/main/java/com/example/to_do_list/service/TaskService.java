@@ -37,6 +37,19 @@ public class TaskService {
         return toDto(taskRepository.save(task));
     }
 
+    public Optional<TaskDto> update(Long id, TaskDto taskDto) {
+        Optional<Task> task = taskRepository.findById(id);
+        task.ifPresent(t -> {
+            t.setTitle(taskDto.getTitle());
+            t.setDescription(taskDto.getDescription());
+            t.setDueDate(taskDto.getDueDate());
+            t.setIsCompleted(taskDto.getIsCompleted());
+            t.setUpdatedAt(LocalDateTime.now());
+            taskRepository.save(t);
+        });
+        return task.map(this::toDto);
+    }
+
     public TaskDto toDto(Task task) {
         TaskDto taskDto = new TaskDto();
         taskDto.setId(task.getId());

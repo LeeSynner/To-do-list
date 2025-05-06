@@ -34,4 +34,10 @@ public class TodoController {
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(taskDto));
     }
+
+    @PutMapping("/task/{id}")
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        Optional<TaskDto> updatedTaskDto = taskService.update(id, taskDto);
+        return updatedTaskDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
