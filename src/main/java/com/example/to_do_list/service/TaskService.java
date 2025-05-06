@@ -27,13 +27,7 @@ public class TaskService {
     }
 
     public TaskDto create(TaskDto taskDto) {
-        Task task = new Task();
-        task.setTitle(taskDto.getTitle());
-        task.setDescription(taskDto.getDescription());
-        task.setDueDate(taskDto.getDueDate());
-        task.setIsCompleted(taskDto.getIsCompleted());
-        task.setCreatedAt(LocalDateTime.now());
-        task.setUpdatedAt(null);
+        Task task = toEntity(taskDto);
         return toDto(taskRepository.save(task));
     }
 
@@ -43,7 +37,7 @@ public class TaskService {
             t.setTitle(taskDto.getTitle());
             t.setDescription(taskDto.getDescription());
             t.setDueDate(taskDto.getDueDate());
-            t.setIsCompleted(taskDto.getIsCompleted());
+            t.setCompleted(taskDto.isCompleted());
             t.setUpdatedAt(LocalDateTime.now());
             taskRepository.save(t);
         });
@@ -55,15 +49,24 @@ public class TaskService {
     }
 
     public TaskDto toDto(Task task) {
-        TaskDto taskDto = new TaskDto();
-        taskDto.setId(task.getId());
-        taskDto.setTitle(task.getTitle());
-        taskDto.setDescription(task.getDescription());
-        taskDto.setDueDate(task.getDueDate());
-        taskDto.setIsCompleted(task.getIsCompleted());
-        taskDto.setCreatedAt(task.getCreatedAt());
-        taskDto.setUpdatedAt(task.getUpdatedAt());
-        return taskDto;
+        return TaskDto.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .dueDate(task.getDueDate())
+                .isCompleted(task.isCompleted())
+                .createdAt(task.getCreatedAt())
+                .updatedAt(task.getUpdatedAt()).build();
+    }
+
+    public Task toEntity(TaskDto taskDto) {
+        return Task.builder()
+                .title(taskDto.getTitle())
+                .description(taskDto.getDescription())
+                .dueDate(taskDto.getDueDate())
+                .isCompleted(taskDto.isCompleted())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null).build();
     }
 
 }
