@@ -4,6 +4,7 @@ import com.example.to_do_list.service.interfaces.IJwtService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class JwtService implements IJwtService {
     @Value("${jwt.secret}")
     private String secret;
@@ -21,6 +23,7 @@ public class JwtService implements IJwtService {
 
     @Override
     public String generateToken(String username) {
+        log.info("Generate token for user: {}", username);
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
