@@ -1,17 +1,14 @@
 package com.example.to_do_list.controller;
 
-import com.example.to_do_list.domain.User;
 import com.example.to_do_list.dto.AuthRequest;
 import com.example.to_do_list.dto.AuthResponse;
 import com.example.to_do_list.dto.UserDto;
-import com.example.to_do_list.repository.UserRepository;
 import com.example.to_do_list.service.JwtService;
 import com.example.to_do_list.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
