@@ -3,8 +3,8 @@ package com.example.to_do_list.controller;
 import com.example.to_do_list.dto.AuthRequest;
 import com.example.to_do_list.dto.AuthResponse;
 import com.example.to_do_list.dto.UserDto;
-import com.example.to_do_list.service.JwtService;
-import com.example.to_do_list.service.UserService;
+import com.example.to_do_list.service.interfaces.IJwtService;
+import com.example.to_do_list.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final UserService userService;
+    private final IJwtService jwtService;
+    private final IUserService userService;
 
     public  AuthController(AuthenticationManager authenticationManager,
-                           JwtService jwtService,
-                           UserService userService) {
+                           IJwtService jwtService,
+                           IUserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;

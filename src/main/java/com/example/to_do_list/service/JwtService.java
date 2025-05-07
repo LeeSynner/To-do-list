@@ -1,5 +1,6 @@
 package com.example.to_do_list.service;
 
+import com.example.to_do_list.service.interfaces.IJwtService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,7 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
-public class JwtService {
+public class JwtService implements IJwtService {
     @Value("${jwt.secret}")
     private String secret;
 
@@ -18,6 +19,17 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
+    @Override
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(getSignKey())
+                .compact();
+    }
+
+    @Override
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
@@ -31,15 +43,7 @@ public class JwtService {
         }
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(getSignKey())
-                .compact();
-    }
-
+    @Override
     public String extractUsername(String token) {
         return Jwts.parser()
                 .verifyWith(getSignKey())

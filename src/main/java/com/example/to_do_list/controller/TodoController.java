@@ -1,7 +1,7 @@
 package com.example.to_do_list.controller;
 
 import com.example.to_do_list.dto.TaskDto;
-import com.example.to_do_list.service.TaskService;
+import com.example.to_do_list.service.interfaces.ITaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class TodoController {
-    private final TaskService taskService;
+    private final ITaskService taskService;
 
-    public TodoController(TaskService taskService) {
+    public TodoController(ITaskService taskService) {
         this.taskService = taskService;
     }
 

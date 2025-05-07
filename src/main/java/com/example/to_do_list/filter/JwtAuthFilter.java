@@ -1,7 +1,7 @@
 package com.example.to_do_list.filter;
 
 import com.example.to_do_list.service.CustomUserDefaultService;
-import com.example.to_do_list.service.JwtService;
+import com.example.to_do_list.service.interfaces.IJwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +18,10 @@ import java.io.IOException;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter  {
 
-    private final JwtService jwtService;
+    private final IJwtService jwtService;
     private final CustomUserDefaultService userDefaultService;
 
-    public JwtAuthFilter(JwtService jwtService, CustomUserDefaultService userDefaultService) {
+    public JwtAuthFilter(IJwtService jwtService, CustomUserDefaultService userDefaultService) {
         this.jwtService = jwtService;
         this.userDefaultService = userDefaultService;
     }
