@@ -5,6 +5,7 @@ import com.example.to_do_list.dto.AuthResponse;
 import com.example.to_do_list.dto.UserDto;
 import com.example.to_do_list.service.interfaces.IJwtService;
 import com.example.to_do_list.service.interfaces.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
         System.out.println("enter to /" +
                 "auth/login");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -43,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> register(@Valid @RequestBody UserDto userDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 }

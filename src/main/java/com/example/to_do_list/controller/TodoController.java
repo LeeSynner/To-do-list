@@ -2,6 +2,7 @@ package com.example.to_do_list.controller;
 
 import com.example.to_do_list.dto.TaskDto;
 import com.example.to_do_list.service.interfaces.ITaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,12 @@ public class TodoController {
     }
 
     @PostMapping("/task")
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(taskDto));
     }
 
     @PutMapping("/task/{id}")
-    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) {
         Optional<TaskDto> updatedTaskDto = taskService.update(id, taskDto);
         return updatedTaskDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

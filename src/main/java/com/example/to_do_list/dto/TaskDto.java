@@ -3,6 +3,7 @@ package com.example.to_do_list.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TaskDto {
     private long id;
+    @NotNull
     private String title;
     private String description;
     @JsonSerialize(using = LocalDateTimeSerializer.class)

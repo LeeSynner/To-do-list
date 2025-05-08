@@ -2,6 +2,7 @@ package com.example.to_do_list.service;
 
 import com.example.to_do_list.domain.User;
 import com.example.to_do_list.dto.UserDto;
+import com.example.to_do_list.exception.ConflictDataException;
 import com.example.to_do_list.repository.UserRepository;
 import com.example.to_do_list.service.interfaces.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class UserService implements IUserService {
     @Override
     public UserDto create(UserDto userDto) {
         log.info("Registration new user: {}", userDto.getUsername());
+        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+            throw new ConflictDataException("Пользователь с таким username уже существует");
+        }
         User user = User.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
