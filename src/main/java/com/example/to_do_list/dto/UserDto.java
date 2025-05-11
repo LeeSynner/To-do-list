@@ -1,5 +1,6 @@
 package com.example.to_do_list.dto;
 
+import com.example.to_do_list.domain.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ public class UserDto {
     @NotNull
     private String password;
     @NotNull
-    private String role;
+    private Role role;
 
     @JsonIgnore
     public String getPassword() {

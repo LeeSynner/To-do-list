@@ -21,6 +21,8 @@ public class TaskDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dueDate;
     private boolean isCompleted;
+    @NotNull
+    private Long userId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -20,8 +20,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<TaskDto> getAll() {
-        return taskRepository.findAll().stream().map(this::toDto).toList();
+    public List<TaskDto> getByUsername(String username) {
+        return taskRepository.findByUserUsername(username).stream().map(this::toDto).toList();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.example.to_do_list.service.interfaces.ITaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class TodoController {
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getTasks() {
-        System.out.println("Enter to index");
-        return ResponseEntity.ok(taskService.getAll());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(taskService.getByUsername(username));
     }
 
     @GetMapping("/task/{id}")

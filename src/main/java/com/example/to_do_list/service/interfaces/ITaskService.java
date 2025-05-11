@@ -1,6 +1,7 @@
 package com.example.to_do_list.service.interfaces;
 
 import com.example.to_do_list.domain.Task;
+import com.example.to_do_list.domain.User;
 import com.example.to_do_list.dto.TaskDto;
 
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITaskService {
-    List<TaskDto> getAll();
+    List<TaskDto> getByUsername(String username);
 
     Optional<TaskDto> getById(Long id);
 
@@ -25,6 +26,7 @@ public interface ITaskService {
                 .description(task.getDescription())
                 .dueDate(task.getDueDate())
                 .isCompleted(task.isCompleted())
+                .userId(task.getUser() != null ? task.getUser().getId() : 0)
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt()).build();
     }
@@ -35,6 +37,7 @@ public interface ITaskService {
                 .description(taskDto.getDescription())
                 .dueDate(taskDto.getDueDate())
                 .isCompleted(taskDto.isCompleted())
+                .user(User.builder().id(taskDto.getUserId()).build())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null).build();
     }

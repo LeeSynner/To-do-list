@@ -7,6 +7,8 @@ public interface IUserService {
 
     UserDto create(UserDto userDto);
 
+    Long getIdByUsername(String username);
+
     default UserDto toDto(User user) {
         return UserDto.builder()
                 .id(user.getId())

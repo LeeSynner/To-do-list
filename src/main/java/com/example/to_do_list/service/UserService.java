@@ -34,4 +34,9 @@ public class UserService implements IUserService {
                 .build();
         return toDto(userRepository.save(user));
     }
+
+    @Override
+    public Long getIdByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow().getId();
+    }
 }

@@ -24,4 +24,7 @@ public class Task {
     private boolean isCompleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user"))
+    private User user;
 }
