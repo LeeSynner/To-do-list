@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +28,7 @@ public class UserServiceTest {
 
     @Test
     void testCreateUser_whenUserDoesNotExists() {
-        UserDto userDto = UserDto.builder()
+        final UserDto userDto = UserDto.builder()
                 .username("testUser")
                 .password("password")
                 .role(Role.ROLE_USER).build();
@@ -35,7 +36,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByUsername(userDto.getUsername())).thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encodedPassword");
 
-        User user = User.builder()
+        final User user = User.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(userDto.getRole())
@@ -43,7 +44,7 @@ public class UserServiceTest {
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        UserDto createdUser = userService.create(userDto);
+        final UserDto createdUser = userService.create(userDto);
 
          assertThat(createdUser).isNotNull();
          assertThat(createdUser.getUsername()).isEqualTo(userDto.getUsername());
@@ -56,7 +57,7 @@ public class UserServiceTest {
 
     @Test
     void testCreateUser_whenUsernameAlreadyExists() {
-        UserDto userDto = UserDto.builder()
+        final UserDto userDto = UserDto.builder()
                 .username("testExistsUser")
                 .password("password")
                 .role(Role.ROLE_USER).build();
@@ -76,6 +77,9 @@ public class UserServiceTest {
 
         assertThatCode(() -> userService.getIdByUsername(username))
                 .doesNotThrowAnyException();
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .findByUsername(username);
     }
 
     @Test
@@ -85,6 +89,9 @@ public class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.getIdByUsername(username))
-                .isInstanceOf(Throwable.class);
+                .isInstanceOf(NoSuchElementException.class);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .findByUsername(username);
     }
 }
