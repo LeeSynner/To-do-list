@@ -45,6 +45,8 @@ public class TodoController {
 
     @DeleteMapping("/task/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (taskService.getById(id).isEmpty())
+            return ResponseEntity.notFound().build();
         taskService.delete(id);
         return ResponseEntity.noContent().build();
     }
