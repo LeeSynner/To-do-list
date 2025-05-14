@@ -20,7 +20,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +48,7 @@ public class TodoControllerIntegrationTest {
     private User user;
 
     private List<Task> listOfTasks;
+
 
     @BeforeEach
     void setup() {
@@ -81,11 +81,8 @@ public class TodoControllerIntegrationTest {
             "test3 title, test3 description, true",
             "test3 title, null, false"
     }, nullValues = "null")
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testCreateTask_success(String title, String description, boolean completed) throws Exception {
-        System.out.println(MessageFormat.format("title: {0}, description: {1}, completed: {2}", title, description, completed));
-        System.out.println("testCreateTask_success: " + user.getId());
-
         TaskDto taskDto = TaskDto.builder()
                 .title(title)
                 .description(description)
@@ -107,9 +104,9 @@ public class TodoControllerIntegrationTest {
             "test description, true",
             "test description, false",
             ", false",
-            ", true"
+            ", true",
     })
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testCreateTask_failed(String description, boolean completed) throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .description(description)
@@ -129,7 +126,7 @@ public class TodoControllerIntegrationTest {
         mockMvc.perform(post("/api/task")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDto)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @ParameterizedTest
@@ -139,7 +136,7 @@ public class TodoControllerIntegrationTest {
             "test3 title, , false",
             "test4 title, , true"
     })
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testUpdateTask(String title, String description, boolean completed) throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .title(title)
@@ -158,12 +155,12 @@ public class TodoControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testUpdateTask_whenTaskDoesNotExists() throws Exception {
         TaskDto taskDto = TaskDto.builder()
                 .title("test title")
                 .userId(user.getId()).build();
-        long taskId = 0;
+        long taskId = Long.MAX_VALUE;
 
         mockMvc.perform(put("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -181,11 +178,11 @@ public class TodoControllerIntegrationTest {
         mockMvc.perform(put("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(taskDto)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testGetTasks_success() throws Exception {
         mockMvc.perform(get("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -199,11 +196,11 @@ public class TodoControllerIntegrationTest {
     void testGetTasks_withoutAuth() throws Exception {
         mockMvc.perform(get("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testGetTask_success() throws Exception {
         Task task = listOfTasks.get(0);
         mockMvc.perform(get("/api/task/" + task.getId())
@@ -215,9 +212,9 @@ public class TodoControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testGetTask_whenTaskDoesNotExists() throws Exception {
-        long taskId = 0;
+        long taskId = Long.MAX_VALUE;
         mockMvc.perform(get("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -228,11 +225,11 @@ public class TodoControllerIntegrationTest {
         long taskId = listOfTasks.get(0).getId();
         mockMvc.perform(get("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testDeleteTask_whenTaskExists() throws Exception {
         long taskId = listOfTasks.get(0).getId();
         mockMvc.perform(delete("/api/task/" + taskId)
@@ -241,9 +238,9 @@ public class TodoControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser(username = "testuser")
     void testDeleteTask_whenTaskDoesNotExists() throws Exception {
-        long taskId = 0;
+        long taskId = Long.MAX_VALUE;
         mockMvc.perform(delete("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -254,6 +251,6 @@ public class TodoControllerIntegrationTest {
         long taskId = listOfTasks.get(0).getId();
         mockMvc.perform(delete("/api/task/" + taskId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }

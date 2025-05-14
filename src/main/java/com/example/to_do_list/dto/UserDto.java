@@ -3,8 +3,8 @@ package com.example.to_do_list.dto;
 import com.example.to_do_list.domain.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,19 +13,11 @@ import lombok.Data;
 public class UserDto {
     private Long id;
     @NotNull
+    @NotEmpty
     private String username;
     @NotNull
+    @NotEmpty
     private String password;
     @NotNull
     private Role role;
-
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,5 +29,12 @@ public class GlobalExceptionHandler {
         Map<String, String> message = new HashMap<>();
         message.put("message", ex.getMessage());
         return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, String>> handleAuthenticationExceptions(AuthenticationException ex) {
+        Map<String, String> message = new HashMap<>();
+        message.put("message", ex.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 }
