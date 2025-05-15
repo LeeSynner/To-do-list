@@ -14,8 +14,11 @@ import java.util.Date;
 @Service
 @Slf4j
 public class JwtService implements IJwtService {
-    @Value("${jwt.secret}")
-    private String secret;
+    final private String secret;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.secret = secret;
+    }
 
     private SecretKey getSignKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -27,7 +30,7 @@ public class JwtService implements IJwtService {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000))
+                .expiration(new Date(System.currentTimeMillis() + 86400000)) //  +24 hours
                 .signWith(getSignKey())
                 .compact();
     }
